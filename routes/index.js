@@ -3,12 +3,58 @@ const bcryptjs = require("bcryptjs");
 const User = require("../models/User.model");
 
 /* GET home page */
+
+router.get("/main", (req, res) => {
+  res.render("main.hbs");
+});
+
+router.get("/private", (req, res) => {
+  res.render("private.hbs");
+});
+
+router.get("/profile", (req, res) => {
+  res.render("profile.hbs", req.session.user);
+});
+
 router.get("/", (req, res, next) => {
   res.render("index.hbs");
 });
 
 router.get("/signup", (req, res) => {
   res.render("signup.hbs");
+});
+
+router.get("/login", (req, res) => {
+  res.render("login.hbs");
+});
+
+//LOGIN
+router.post("/login", (req, res) => {
+  if (!req.body.username || !req.body.password) {
+    res.render("login.hbs", { errorMessage: "field(s) are blank" });
+    return;
+  }
+  User.findOne({ username: req.body.username })
+    .then((foundUser) => {
+      if (!foundUser) {
+        res.render("login.hbs", { errorMessage: "user does not exist" });
+        return;
+      }
+      const isValidPassword = bcryptjs.compareSync(
+        req.body.password,
+        foundUser.password
+      );
+      if (!isValidPassword) {
+        res.render("login.hbs", { errorMessage: "password incorrect" });
+        return;
+      }
+      //   session is for cookies
+      req.session.user = foundUser;
+      res.render("profile.hbs", foundUser);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
 });
 
 router.post("/signup", (req, res) => {

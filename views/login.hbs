@@ -1,6 +1,5 @@
-<h1>signup - LAB</h1>
-{{!-- action is where we are sending data to  --}}
-<form action="/signup" method="POST">
+<h1>login - LAB</h1>
+<form action="/login" method="POST">
 <label for="emailInput">Email</label>
 <br>
 <input type="email" name="username" id="emailInput">
@@ -11,3 +10,7 @@
 <br>
 <button>Submit</button>
 </form>
+
+{{#if errorMessage}}
+<p>{{errorMessage}}</p>
+{{/if}}
