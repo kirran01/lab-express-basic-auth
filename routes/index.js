@@ -1,14 +1,24 @@
 const router = require("express").Router();
 const bcryptjs = require("bcryptjs");
 const User = require("../models/User.model");
+const {
+  isLoggedIn,
+  isNotLoggedIn,
+} = require("../middlewares/auth.middlewares.js");
 
 /* GET home page */
 
-router.get("/main", (req, res) => {
+router.get("/logout", isLoggedIn, (req, res) => {
+  req.session.destroy(() => {
+    res.redirect("/");
+  });
+});
+
+router.get("/main", isLoggedIn, (req, res) => {
   res.render("main.hbs");
 });
 
-router.get("/private", (req, res) => {
+router.get("/private", isLoggedIn, (req, res) => {
   res.render("private.hbs");
 });
 
