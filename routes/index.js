@@ -22,7 +22,7 @@ router.get("/private", isLoggedIn, (req, res) => {
   res.render("private.hbs");
 });
 
-router.get("/profile", (req, res) => {
+router.get("/profile",isLoggedIn, (req, res) => {
   res.render("profile.hbs", req.session.user);
 });
 
@@ -30,11 +30,11 @@ router.get("/", (req, res, next) => {
   res.render("index.hbs");
 });
 
-router.get("/signup", (req, res) => {
+router.get("/signup", isNotLoggedIn, (req, res) => {
   res.render("signup.hbs");
 });
 
-router.get("/login", (req, res) => {
+router.get("/login",isNotLoggedIn, (req, res) => {
   res.render("login.hbs");
 });
 
